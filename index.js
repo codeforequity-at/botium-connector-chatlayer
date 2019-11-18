@@ -1,7 +1,4 @@
 const util = require('util')
-const url = require('url')
-const mime = require('mime-types')
-const _ = require('lodash')
 const debug = require('debug')('botium-connector-chatlayer')
 
 const SimpleRestContainer = require('botium-core/src/containers/plugins/SimpleRestContainer')
@@ -52,9 +49,9 @@ class BotiumConnectorChatlayer {
             "text": "{{msg.messageText}}",
             "verifyToken": "${this.caps[Capabilities.CHATLAYER_VERIFYTOKEN]}"
           }`,
-        //[CoreCapabilities.SIMPLEREST_HEADERS_TEMPLATE]: `{
-        //    "Authorization": "Bearer {{context.token}}"
-        //  }`,
+        [CoreCapabilities.SIMPLEREST_HEADERS_TEMPLATE]: `{
+            "Authorization": "Bearer {{context.token}}"
+          }`,
         [CoreCapabilities.SIMPLEREST_REQUEST_HOOK]: ({ requestOptions, msg, context }) => {
           debug(`Request Body: ${JSON.stringify(requestOptions.body)}`)
         },
