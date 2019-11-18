@@ -52,11 +52,11 @@ _Already integrated into Botium Box, no setup required_
 
 Chatlayer.ai has an asynchronous communication model: the bot response is not part of the HTTP/JSON response, but it is sent to a webhook. This webhook is started automatically by Botium, and it has to be registered in Chatlayer first. You have to take care that this webhook is available from the public internet.
 
-Configure the webhook with the capabilities _SIMPLEREST_INBOUND_PORT_ and _SIMPLEREST_INBOUND_ENDPOINT_. When starting Botium, the webhook is available at _http://<local-ip-address>:<inbound-port>/<input-endpoint>_. If your workstation is not available from public internet, you can use a service like [ngrok](https://ngrok.com/) to make it public:
+Configure the webhook with the capabilities _SIMPLEREST_INBOUND_PORT_ and _SIMPLEREST_INBOUND_ENDPOINT_. When starting Botium, the webhook is available at _http://local-ip-address:inbound-port/input-endpoint_. If your workstation is not available from public internet, you can use a service like [ngrok](https://ngrok.com/) to make it public:
 
     > ngrok http 1234
 
-The webhook is available at _https://<something>.ngrok.io/<input-endpoint>_ then.
+The webhook is available at _https://something.ngrok.io/input-endpoint_ then.
 
 Register the webhook URL together with the verify token at [Chatlayer.ai](https://docs.chatlayer.ai/channels/webhook-api).
 
