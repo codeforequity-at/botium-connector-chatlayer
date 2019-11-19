@@ -4,3 +4,7 @@ hi
 hi
 
 #bot
+Hello. Please configure the introduction bot dialog with a meaningful message.
+
+#bot
+First intro ...

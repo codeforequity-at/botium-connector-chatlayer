@@ -58,7 +58,7 @@ Configure the webhook with the capabilities _SIMPLEREST_INBOUND_PORT_ and _SIMPL
 
 The webhook is available at _https://something.ngrok.io/input-endpoint_ then.
 
-Register the webhook URL together with the verify token at [Chatlayer.ai](https://docs.chatlayer.ai/channels/webhook-api).
+Register the webhook URL together with a verify token of your choice at [Chatlayer.ai](https://docs.chatlayer.ai/channels/webhook-api).
 
 Create a botium.json with this URL in your project directory: 
 
@@ -69,6 +69,7 @@ Create a botium.json with this URL in your project directory:
       "PROJECTNAME": "<whatever>",
       "CONTAINERMODE": "chatlayer",
       "CHATLAYER_BOTID": "...",
+      "CHATLAYER_VERIFYTOKEN": "...",
       "SIMPLEREST_INBOUND_PORT": 1234
     }
   }
@@ -105,10 +106,8 @@ Chatlayer API url
 ## CHATLAYER_BOTID *
 Chatlayer Bot Identifier
 
-## CHATLAYER_EMAIL
-## CHATLAYER_PASSWORD
-## CHATLAYER_TOKEN
-## CHATLAYER_VERIFYTOKEN
+## CHATLAYER_VERIFYTOKEN *
+Chatlayer Webhook verify token
 
 ## SIMPLEREST_INBOUND_PORT
 

@@ -4,10 +4,8 @@
       "PROJECTNAME": "Botium Project Chatlayer",
       "CONTAINERMODE": "chatlayer",
       "CHATLAYER_BOTID": "706",
-      "CHATLAYER_EMAIL": "florian.treml@botium.at",
       "CHATLAYER_VERIFYTOKEN": "12345",
-      "SIMPLEREST_INBOUND_PORT": 1234,
-      "SIMPLEREST_INBOUND_ENDPOINT": "/chatlayer"
+      "SIMPLEREST_INBOUND_PORT": 1234
     }
   }
 }
