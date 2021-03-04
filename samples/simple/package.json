@@ -2,7 +2,9 @@
   "name": "chatlayer-simple-sample",
   "version": "1.0.0",
   "scripts": {
-    "test": "mocha spec"
+    "test-debug": "DEBUG=botium-connector* mocha spec",
+    "test": "mocha spec",
+    "inbound": "botium-cli inbound-proxy --verbose"
   },
   "botium": {
     "convodirs": [
@@ -13,6 +15,7 @@
   },
   "devDependencies": {
     "botium-bindings": "latest",
+    "botium-cli": "latest",
     "botium-connector-chatlayer": "../../",
     "mocha": "latest"
   }

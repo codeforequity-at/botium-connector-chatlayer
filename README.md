@@ -52,15 +52,35 @@ _Already integrated into Botium Box, no setup required_
 
 Chatlayer.ai has an asynchronous communication model: the bot response is not part of the HTTP/JSON response, but it is sent to a webhook. This webhook is started automatically by Botium, and it has to be registered in Chatlayer first. You have to take care that this webhook is available from the public internet.
 
+#### Confiure the webhook
+
+There are two possibilities to set up the webhook endpoint.
+
+###### Proxy server
 Configure the webhook with the capabilities _SIMPLEREST_INBOUND_PORT_ and _SIMPLEREST_INBOUND_ENDPOINT_. When starting Botium, the webhook is available at _http://local-ip-address:inbound-port/input-endpoint_. If your workstation is not available from public internet, you can use a service like [ngrok](https://ngrok.com/) to make it public:
 
     > ngrok http 1234
 
 The webhook is available at _https://something.ngrok.io/input-endpoint_ then.
 
-Register the webhook URL together with a verify token of your choice at [Chatlayer.ai](https://docs.chatlayer.ai/channels/webhook-api).
+###### Proxy server with redis
+Configure the webhook with the capability SIMPLEREST_INBOUND_REDISURL. Then start and inbound proxy with `botium-cli`. 
 
-Create a botium.json with this URL in your project directory: 
+    > botium-cli inbound-proxy
+    
+     redis://127.0.0.1:6379
+     Botium Inbound Messages proxy is listening on port 45100
+     Botium Inbound Messages endpoint available at http://127.0.0.1:45100/
+
+To make it public you can use ngrok:
+    
+    > ngrok http 45100
+
+The webhook is available at https://something.ngrok.io then.
+
+If your proxy server is up and running, then you can register the webhook URL together with a verify token of your choice at [Chatlayer.ai](https://docs.chatlayer.ai/channels/webhook-api).
+
+Create a botium.json in your project directory: 
 
 ```
 {
@@ -68,9 +88,10 @@ Create a botium.json with this URL in your project directory:
     "Capabilities": {
       "PROJECTNAME": "<whatever>",
       "CONTAINERMODE": "chatlayer",
-      "CHATLAYER_BOTID": "...",
-      "CHATLAYER_VERIFYTOKEN": "...",
-      "SIMPLEREST_INBOUND_PORT": 1234
+      "CHATLAYER_VERIFY_TOKEN": "...",
+      "CHATLAYER_ACCESS_TOKEN": "...",
+      "CHATLAYER_CHANNEL_ID": "...",
+      "SIMPLEREST_INBOUND_REDISURL": "redis://127.0.0.1:6379"
     }
   }
 }
@@ -86,12 +107,15 @@ Botium setup is ready, you can begin to write your [BotiumScript](https://github
 
 ## How to start samples
 
-* Adapt botium.json in the sample directory
-* Install packages, run the test
+* Adapt botium.json in the `sample/simple` directory
+* Install packages, start inbound proxy and run the test.
 
+_In this sample we use the webhook configuration which is written under **Proxy server with redis**_
 ```
 > cd ./samples/simple
-> npm install && npm test
+> npm install
+> npm run inbound
+> npm test
 ```
 
 ## Supported Capabilities
@@ -99,21 +123,29 @@ Botium setup is ready, you can begin to write your [BotiumScript](https://github
 Set the capability __CONTAINERMODE__ to __chatlayer__ to activate this connector.
 
 ### CHATLAYER_URL
-_Default: https://api-staging.chatlayer.ai_
+_Default: https://api.chatlayer.ai_
 
 Chatlayer API url
 
-## CHATLAYER_BOTID *
-Chatlayer Bot Identifier
+### CHATLAYER_CHANNEL_ID *
+Chatlayer Channel Identifier. You can find this information in the `Configure Webhook` dialog on chatlayer surface.
 
-## CHATLAYER_VERIFYTOKEN *
-Chatlayer Webhook verify token
+### CHATLAYER_VERIFYTOKEN *
+Chatlayer Webhook verify token.
 
-## SIMPLEREST_INBOUND_PORT
+### CHATLAYER_ACCESS_TOKEN *
+You generate one under the `Tokens` menu on chatlayer surface.
 
-## SIMPLEREST_INBOUND_ENDPOINT
-_Default: /chatlayer_
+### CHATLAYER_SESSION_DATA
+Optionally you can set session data as a json object.
+
+### SIMPLEREST_INBOUND_PORT
+
+### SIMPLEREST_INBOUND_ENDPOINT
+e.g. `/chatlayer`
+
+### SIMPLEREST_INBOUND_REDISURL
+e.g. `redis://127.0.0.1:6379`
 
 ### Roadmap
-* Support for UI elements and rich text
-* Support for intent/entity asserter
+* Support for entity asserter

@@ -1,10 +1,13 @@
-hi
+Hi
 
 #me
-hi
+Hi
 
 #bot
-Hello. Please configure the introduction bot dialog with a meaningful message.
+Hello
+
+#me
+Bye
 
 #bot
-First intro ...
+Bye Bye

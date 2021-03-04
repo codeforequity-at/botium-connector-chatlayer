@@ -1,6 +1,6 @@
 {
   "name": "botium-connector-chatlayer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Botium Connector for Chatlayer.ai",
   "main": "dist/botium-connector-chatlayer-cjs.js",
   "module": "dist/botium-connector-chatlayer-es.js",
@@ -35,6 +35,6 @@
     "mime-types": "^2.1.24"
   },
   "peerDependencies": {
-    "botium-core": ">= 1.7.3"
+    "botium-core": ">= 1.11.1"
   }
 }
