@@ -11,7 +11,8 @@ const Capabilities = {
   CHATLAYER_CHANNEL_ID: 'CHATLAYER_CHANNEL_ID',
   CHATLAYER_VERIFY_TOKEN: 'CHATLAYER_VERIFY_TOKEN',
   CHATLAYER_ACCESS_TOKEN: 'CHATLAYER_ACCESS_TOKEN',
-  CHATLAYER_SESSION_DATA: 'CHATLAYER_SESSION_DATA'
+  CHATLAYER_SESSION_DATA: 'CHATLAYER_SESSION_DATA',
+  CHATLAYER_WELCOME_MESSAGE: 'CHATLAYER_WELCOME_MESSAGE'
 }
 
 const Defaults = {
@@ -52,7 +53,9 @@ class BotiumConnectorChatlayer {
             requestOptions.body.sessionData = this.caps[Capabilities.CHATLAYER_SESSION_DATA]
           }
           const message = requestOptions.body.message
-          if (msg.buttons && msg.buttons.length > 0 && (msg.buttons[0].text || msg.buttons[0].payload)) {
+          if (msg.introMessage) {
+            message.introMessage = {}
+          } else if (msg.buttons && msg.buttons.length > 0 && (msg.buttons[0].text || msg.buttons[0].payload)) {
             message.postbackMessage = {
               title: msg.buttons[0].text
             }
@@ -171,8 +174,11 @@ class BotiumConnectorChatlayer {
     return this.delegateContainer.Build()
   }
 
-  Start () {
-    return this.delegateContainer.Start()
+  async Start () {
+    await this.delegateContainer.Start()
+    if (!_.isNil(this.caps[Capabilities.CHATLAYER_WELCOME_MESSAGE])) {
+      await this.UserSays({ introMessage: {} })
+    }
   }
 
   UserSays (msg) {

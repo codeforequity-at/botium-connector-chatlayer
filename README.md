@@ -139,6 +139,9 @@ You generate one under the `Tokens` menu on chatlayer surface.
 ### CHATLAYER_SESSION_DATA
 Optionally you can set session data as a json object.
 
+### CHATLAYER_WELCOME_MESSAGE
+Set it true if your bot has welcome/intro message.
+
 ### SIMPLEREST_INBOUND_PORT
 
 ### SIMPLEREST_INBOUND_ENDPOINT
