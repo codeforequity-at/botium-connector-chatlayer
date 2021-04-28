@@ -212,8 +212,13 @@ class BotiumConnectorChatlayer {
 module.exports = {
   PluginVersion: 1,
   PluginClass: BotiumConnectorChatlayer,
-  features: {
-    intentResolution: true,
-    intentConfidenceScore: true
+  PluginDesc: {
+    name: 'Chatlayer',
+    provider: 'Chatlayer',
+    features: {
+      intentResolution: true,
+      intentConfidenceScore: true
+    }
   }
+
 }
