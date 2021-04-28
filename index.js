@@ -176,7 +176,7 @@ class BotiumConnectorChatlayer {
 
   async Start () {
     await this.delegateContainer.Start()
-    if (!_.isNil(this.caps[Capabilities.CHATLAYER_WELCOME_MESSAGE])) {
+    if (this.caps[Capabilities.CHATLAYER_WELCOME_MESSAGE]) {
       await this.UserSays({ introMessage: {} })
     }
   }
