@@ -1,6 +1,6 @@
 {
   "name": "botium-connector-chatlayer",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Botium Connector for Chatlayer.ai",
   "main": "dist/botium-connector-chatlayer-cjs.js",
   "module": "dist/botium-connector-chatlayer-es.js",
@@ -22,6 +22,7 @@
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "request-promise-native": "^1.0.9",
     "rollup": "^1.21.2",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
