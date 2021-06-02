@@ -1,0 +1,20 @@
+{
+  "name": "chatlayer-simple-sample",
+  "version": "1.0.0",
+  "scripts": {
+    "test-debug": "DEBUG=botium-connector* mocha spec",
+    "test": "mocha spec"
+  },
+  "botium": {
+    "convodirs": [
+      "spec/convo"
+    ],
+    "expandConvos": true,
+    "expandUtterancesToConvos": false
+  },
+  "devDependencies": {
+    "botium-bindings": "latest",
+    "botium-connector-chatlayer": "../../",
+    "mocha": "latest"
+  }
+}

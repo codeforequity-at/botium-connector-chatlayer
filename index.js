@@ -1,6 +1,8 @@
 const util = require('util')
+const { URL } = require('url')
 const _ = require('lodash')
 const mime = require('mime-types')
+const request = require('request-promise-native')
 const debug = require('debug')('botium-connector-chatlayer')
 
 const SimpleRestContainer = require('botium-core/src/containers/plugins/SimpleRestContainer')
@@ -8,15 +10,18 @@ const CoreCapabilities = require('botium-core/src/Capabilities')
 
 const Capabilities = {
   CHATLAYER_URL: 'CHATLAYER_URL',
-  CHATLAYER_CHANNEL_ID: 'CHATLAYER_CHANNEL_ID',
   CHATLAYER_VERIFY_TOKEN: 'CHATLAYER_VERIFY_TOKEN',
   CHATLAYER_ACCESS_TOKEN: 'CHATLAYER_ACCESS_TOKEN',
   CHATLAYER_SESSION_DATA: 'CHATLAYER_SESSION_DATA',
-  CHATLAYER_WELCOME_MESSAGE: 'CHATLAYER_WELCOME_MESSAGE'
+  CHATLAYER_WELCOME_MESSAGE: 'CHATLAYER_WELCOME_MESSAGE',
+  CHATLAYER_BOT_ID: 'CHATLAYER_BOT_ID',
+  CHATLAYER_VERSION: 'CHATLAYER_VERSION',
+  CHATLAYER_LANGUAGE: 'CHATLAYER_LANGUAGE'
 }
 
 const Defaults = {
-  [Capabilities.CHATLAYER_URL]: 'https://api.chatlayer.ai'
+  [Capabilities.CHATLAYER_VERSION]: 'DRAFT',
+  [Capabilities.CHATLAYER_LANGUAGE]: 'en'
 }
 
 class BotiumConnectorChatlayer {
@@ -32,7 +37,6 @@ class BotiumConnectorChatlayer {
     this.caps = Object.assign({}, Defaults, this.caps)
 
     if (!this.caps[Capabilities.CHATLAYER_URL]) throw new Error('CHATLAYER_URL capability required')
-    if (!this.caps[Capabilities.CHATLAYER_CHANNEL_ID]) throw new Error('CHATLAYER_CHANNEL_ID capability required')
     if (!this.caps[Capabilities.CHATLAYER_ACCESS_TOKEN]) throw new Error('CHATLAYER_ACCESS_TOKEN capability required')
     if (!this.caps[Capabilities.CHATLAYER_VERIFY_TOKEN]) throw new Error('CHATLAYER_VERIFY_TOKEN capability required')
 
@@ -40,7 +44,7 @@ class BotiumConnectorChatlayer {
 
     if (!this.delegateContainer) {
       Object.assign(this.delegateCaps, {
-        [CoreCapabilities.SIMPLEREST_URL]: `${this.caps[Capabilities.CHATLAYER_URL]}/v1/channels/webhook/${this.caps[Capabilities.CHATLAYER_CHANNEL_ID]}/messages`,
+        [CoreCapabilities.SIMPLEREST_URL]: this.caps[Capabilities.CHATLAYER_URL],
         [CoreCapabilities.SIMPLEREST_METHOD]: 'POST',
         [CoreCapabilities.SIMPLEREST_HEADERS_TEMPLATE]: `{ "Authorization": "Bearer ${this.caps[Capabilities.CHATLAYER_ACCESS_TOKEN]}"}`,
         [CoreCapabilities.SIMPLEREST_BODY_TEMPLATE]: `{
@@ -76,7 +80,7 @@ class BotiumConnectorChatlayer {
             }
           }
         },
-        [CoreCapabilities.SIMPLEREST_RESPONSE_HOOK]: ({ botMsg }) => {
+        [CoreCapabilities.SIMPLEREST_RESPONSE_HOOK]: async ({ botMsg, msg }) => {
           debug(`Response Body: ${util.inspect(botMsg.sourceData, false, null, true)}`)
 
           const mapButtonPayload = (p) => {
@@ -146,11 +150,8 @@ class BotiumConnectorChatlayer {
               }
             }
 
-            if (botMsg.sourceData.nlp) {
-              botMsg.nlp = {
-                intent: this._extractIntent(botMsg.sourceData.nlp),
-                entities: this._extractEntities(botMsg.sourceData.nlp)
-              }
+            if (botMsg.sourceData.nlp && _.get(botMsg.sourceData.nlp, 'intent.name')) {
+              botMsg.nlp = await this._extractNlp(botMsg, msg)
             }
           }
         },
@@ -193,19 +194,43 @@ class BotiumConnectorChatlayer {
     return this.delegateContainer.Clean()
   }
 
-  _extractIntent (npl) {
-    if (npl.intent) {
-      return {
-        name: npl.intent.name,
-        confidence: npl.intent.score
+  async _extractNlp (botMsg, msg) {
+    const nlp = {
+      intent: {
+        name: botMsg.sourceData.nlp.intent.name,
+        confidence: botMsg.sourceData.nlp.intent.score
       }
     }
-    return {}
-  }
 
-  _extractEntities (npl) {
-    debug('Entities in nlp object not yet supported by Chatlayer.')
-    return []
+    if (this.caps[Capabilities.CHATLAYER_BOT_ID] && msg.messageText) {
+      const body = {
+        language: this.caps[Capabilities.CHATLAYER_LANGUAGE],
+        expression: msg.messageText
+      }
+      try {
+        const baseUrl = new URL(this.caps[Capabilities.CHATLAYER_URL]).origin
+        const requestOptions = {
+          method: 'POST',
+          url: `${baseUrl}/v1/bots/${this.caps[Capabilities.CHATLAYER_BOT_ID]}/nlp/extract?version=${this.caps[Capabilities.CHATLAYER_VERSION]}`,
+          headers: {
+            Authorization: `Bearer ${this.caps[Capabilities.CHATLAYER_ACCESS_TOKEN]}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        }
+        const extractNlpResult = JSON.parse(await request(requestOptions))
+        if (_.get(extractNlpResult, 'extract.intents') && extractNlpResult.extract.intents.length > 0) {
+          nlp.intent.intents = extractNlpResult.extract.intents.map(i => ({ name: i.intent, confidence: i.score }))
+        }
+        if (_.get(extractNlpResult, 'extract.entities') && extractNlpResult.extract.entities.length > 0) {
+          nlp.entities = extractNlpResult.extract.entities.map(e => ({ name: e.name, value: e.value, confidence: e.score }))
+        }
+      } catch (err) {
+        debug(`Cannot process detailed nlp data: ${err}`)
+      }
+    }
+
+    return nlp
   }
 }
 
@@ -217,7 +242,10 @@ module.exports = {
     provider: 'Chatlayer',
     features: {
       intentResolution: true,
-      intentConfidenceScore: true
+      intentConfidenceScore: true,
+      alternateIntents: true,
+      entityResolution: true,
+      entityConfidenceScore: true
     }
   }
 

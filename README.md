@@ -88,9 +88,9 @@ Create a botium.json in your project directory:
     "Capabilities": {
       "PROJECTNAME": "<whatever>",
       "CONTAINERMODE": "chatlayer",
+      "CHATLAYER_URL": "..."
       "CHATLAYER_VERIFY_TOKEN": "...",
       "CHATLAYER_ACCESS_TOKEN": "...",
-      "CHATLAYER_CHANNEL_ID": "...",
       "SIMPLEREST_INBOUND_REDISURL": "redis://127.0.0.1:6379"
     }
   }
@@ -122,9 +122,7 @@ _In this sample we use the webhook configuration which is written under **Proxy 
 
 Set the capability __CONTAINERMODE__ to __chatlayer__ to activate this connector.
 
-### CHATLAYER_URL
-_Default: https://api.chatlayer.ai_
-
+### CHATLAYER_URL*
 Chatlayer API url
 
 ### CHATLAYER_CHANNEL_ID *
@@ -141,6 +139,17 @@ Optionally you can set session data as a json object.
 
 ### CHATLAYER_WELCOME_MESSAGE
 Set it true if your bot has welcome/intro message.
+
+### CHATLAYER_BOT_ID
+For detailed nlp data the bot id has to be set up. You can copy this from the url of your chatbot on chatlayer surface.
+E.g. my url is 'https://cms.staging.chatlayer.ai/bots/abcdabcd/DRAFT' then the bot id is: `abcdabcd`
+
+### CHATLAYER_VERSION
+Set which version you use. It can be `DRAFT` of `LIVE`. The default value is `DRAFT`.
+
+### CHATLAYER_LANGUAGE
+The language of your chatbot. The default value is `en`.
+
 
 ### SIMPLEREST_INBOUND_PORT
 

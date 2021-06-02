@@ -5,9 +5,10 @@
       "CONTAINERMODE": "chatlayer",
       "CHATLAYER_VERIFY_TOKEN": "token12345",
       "CHATLAYER_ACCESS_TOKEN": "asdfsadfsadfzI1NiIsInR5cCI6IkpXVCJ9.123ZDIadfsafdZjM2ItNDA3OC1iNWY4LTU3NmUyZDY2MTMasdfsafde23234iOiJjaHJpc3RvcGguYm9lcm5lckBib3RpdW0uYXQwqrewq32343242YzljNTY1Mi01MGE5LTRhNTgtYmI0My04YzQ4MWZmODkzMmMiLCJncm91cElkcyI6WyJiOWQyMzRlNC1sadfsafdsafd01NzZlMmQ2NjEzN2QiXSwicm9sZXMiOlsib3JnYW5pemF0aW9uLmFkbWluIiwib2ZmbGluZV9hasfdsadfsafdfYXV0aG9yaXphdGlvbiJdfSwiY3JlYXRlZEF0IjoxNjE0MzUwOTA0NzAzLCJpYXasfdsdfsfdsa.asdfsadfazzGX2JqahAvoExv_XKIdUGO7VxM4",
-      "CHATLAYER_URL": "https://api.staging.europe-west1.gc.chatlayer.ai/v1/channels/webhook/6039070a9f07e351b99e2bd4/messages",
+      "CHATLAYER_URL": "https://api.staging.europe-west1.gc.chatlayer.ai/v1/channels/webhook/6039070a9f07e351basdfsa/messages",
       "CHATLAYER_BOT_ID": "abcdabcd",
-      "SIMPLEREST_INBOUND_REDISURL": "redis://127.0.0.1:6379"
+      "SIMPLEREST_INBOUND_PORT": 4002,
+      "SIMPLEREST_INBOUND_ENDPOINT": "/chatlayer"
     }
   }
 }
