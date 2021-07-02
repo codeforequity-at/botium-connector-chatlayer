@@ -142,7 +142,7 @@ Set it true if your bot has welcome/intro message.
 
 ### CHATLAYER_BOT_ID
 For detailed nlp data the bot id has to be set up. You can copy this from the url of your chatbot on chatlayer surface.
-E.g. my url is 'https://cms.staging.chatlayer.ai/bots/abcdabcd/DRAFT' then the bot id is: `abcdabcd`
+E.g. my url is 'https://app.chatlayer.ai/bots/abcdabcd/DRAFT' then the bot id is: `abcdabcd`
 
 ### CHATLAYER_VERSION
 Set which version you use. It can be `DRAFT` of `LIVE`. The default value is `DRAFT`.
