@@ -2,7 +2,6 @@ const util = require('util')
 const { URL } = require('url')
 const _ = require('lodash')
 const mime = require('mime-types')
-const request = require('request-promise-native')
 const debug = require('debug')('botium-connector-chatlayer')
 
 const SimpleRestContainer = require('botium-core/src/containers/plugins/SimpleRestContainer')
@@ -218,7 +217,16 @@ class BotiumConnectorChatlayer {
           },
           body: JSON.stringify(body)
         }
-        const extractNlpResult = JSON.parse(await request(requestOptions))
+        const response = await fetch(requestOptions.url, {
+          method: requestOptions.method,
+          headers: requestOptions.headers,
+          body: requestOptions.body
+        })
+        if (!response.ok) {
+          const errorDetails = await response.text()
+          throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorDetails}`)
+        }
+        const extractNlpResult = await response.json()
         if (_.get(extractNlpResult, 'extract.intents') && extractNlpResult.extract.intents.length > 0) {
           nlp.intent.intents = extractNlpResult.extract.intents.map(i => ({ name: i.intent, confidence: i.score }))
         }
