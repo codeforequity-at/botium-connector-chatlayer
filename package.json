@@ -1,6 +1,6 @@
 {
   "name": "botium-connector-chatlayer",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Botium Connector for Chatlayer.ai",
   "main": "dist/botium-connector-chatlayer-cjs.js",
   "module": "dist/botium-connector-chatlayer-es.js",
